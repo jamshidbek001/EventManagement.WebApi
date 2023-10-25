@@ -16,4 +16,8 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EventManagement.DataAccess\EventManagement.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
