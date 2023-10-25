@@ -8,16 +8,20 @@
 
   <ItemGroup>
     <Folder Include="Common\Attributes\" />
-    <Folder Include="Common\Helpers\" />
     <Folder Include="Common\Validations\" />
     <Folder Include="Common\Security\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Dtos\" />
-    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="6.0.0-preview.4.21253.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EventManagement.DataAccess\EventManagement.DataAccess.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
 </Project>

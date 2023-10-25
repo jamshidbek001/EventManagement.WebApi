@@ -15,4 +15,10 @@
     <ProjectReference Include="..\EventManagement.Service\EventManagement.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\configurations\" />
+    <Folder Include="wwwroot\media\images\" />
+    <Folder Include="wwwroot\media\audios\" />
+  </ItemGroup>
+
 </Project>
