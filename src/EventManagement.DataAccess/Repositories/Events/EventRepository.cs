@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System;
 using Dapper;
 using EventManagement.DataAccess.Interfaces.Events;
 using EventManagement.DataAccess.Utils;
-using EventManagement.DataAccess.ViewModels.Events;
 using EventManagement.Domain.Entities.Events;
+using static Dapper.SqlMapper;
 
 namespace EventManagement.DataAccess.Repositories.Events;
 
@@ -36,9 +35,8 @@ public class EventRepository : BaseRepository, IEventRepository
         {
             await _connection.OpenAsync();
 
-            string query = "INSERT INTO public.events(" +
-                "id, event_name, date_time, location, description, organizer_id, created_at, updated_at)" +
-                "VALUES(@EventName, @DateTime, @Location, @Description, @OrganizerId @CreatedAt, @UpdatedAt);";
+            string query = "INSERT INTO public.events(event_name,date_time,location,description,organizer_id,created_at,updated_at)" +
+                "VALUES (@EventName,@DateTime,@Location,@Description,@OrganizerId,@CreatedAt,@UpdatedAt);";
 
             var result = await _connection.ExecuteAsync(query,entity);
             return result;
@@ -53,17 +51,50 @@ public class EventRepository : BaseRepository, IEventRepository
         }
     }
 
-    public Task<int> DeleteAsync(long id)
+    public async Task<int> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "DELETE FROM events WHERE id=@Id";
+
+            var result = await _connection.ExecuteAsync(query, new { Id=id });
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<Event> GetAllAsync(PaginationParams @params)
+    public async Task<IList<Event>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = $"SELECT FROM events order by id desc" +
+                $"offset {@params.GetSkipCount} limit {@params.PageSize}";
+
+            var result = (await _connection.QueryAsync<Event>(query)).ToList();
+            return result;
+        }
+        catch
+        {
+            return new List<Event>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<EventViewModel> GetByIdAsync(long id)
+    public Task<Event> GetByIdAsync(long id)
     {
         throw new NotImplementedException();
     }

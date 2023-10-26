@@ -15,7 +15,7 @@ create table events
 (
 	id bigint generated always as identity primary key,
 	event_name varchar not null,
-	date_time timestamp not null,
+	date_time date,
 	location varchar not null,
 	description text,
 	organizer_id bigint references users (id),

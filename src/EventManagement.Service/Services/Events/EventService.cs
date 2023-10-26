@@ -3,7 +3,6 @@ using EventManagement.DataAccess.Utils;
 using EventManagement.Domain.Entities.Events;
 using EventManagement.Service.Common.Helpers;
 using EventManagement.Service.Dtos.Events;
-using EventManagement.Service.Interfaces.Common;
 using EventManagement.Service.Interfaces.Events;
 
 namespace EventManagement.Service.Services.Events;
@@ -11,34 +10,28 @@ namespace EventManagement.Service.Services.Events;
 public class EventService : IEventService
 {
     private readonly IEventRepository _eventRepository;
-    private readonly IFileService _fileService;
 
-    public EventService(
-        IEventRepository eventRepository,
-        IFileService fileService)
+    public EventService(IEventRepository eventRepository)
     {
         this._eventRepository = eventRepository;
-        this._fileService = fileService;
     }
 
     public async Task<long> CountAsync()=> await _eventRepository.CountAsync();
 
     public async Task<bool> CreateAsync(EventCreateDto eventDto)
     {
-        var organizerId = 1;
-
-        Event events = new Event()
+        Event @event = new Event()
         {
             EventName = eventDto.EventName,
             DateTime = eventDto.DateTime,
             Location = eventDto.Location,
             Description = eventDto.Description,
-            OrganizerId = organizerId,
+            OrganizerId = 2,
             CreatedAt = TimeHelper.GetDateTime(),
             UpdatedAt = TimeHelper.GetDateTime()
         };
 
-        var result = await _eventRepository.CreateAsync(events);
+        var result = await _eventRepository.CreateAsync(@event);
         return result > 0;
     }
 
@@ -52,7 +45,7 @@ public class EventService : IEventService
         throw new NotImplementedException();
     }
 
-    public Task<long> GetByIdAsync(long eventId)
+    public Task<Event> GetByIdAsync(long eventId)
     {
         throw new NotImplementedException();
     }

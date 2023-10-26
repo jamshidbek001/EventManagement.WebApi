@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventManagement.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/events")]
     [ApiController]
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
-        private readonly int MaxPageSize = 30;
 
         public EventsController(IEventService eventService)
         {
@@ -21,7 +20,7 @@ namespace EventManagement.WebApi.Controllers
             =>Ok(await _eventService.CountAsync());
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromForm] EventCreateDto eventDto)
+        public async Task<IActionResult> CreateAsync([FromBody] EventCreateDto eventDto)
             =>Ok(await _eventService.CreateAsync(eventDto));
     }
 }
