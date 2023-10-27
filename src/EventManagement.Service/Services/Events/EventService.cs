@@ -1,6 +1,7 @@
 ﻿using EventManagement.DataAccess.Interfaces.Events;
 using EventManagement.DataAccess.Utils;
 using EventManagement.Domain.Entities.Events;
+using EventManagement.Domain.Exceptions.Events;
 using EventManagement.Service.Common.Helpers;
 using EventManagement.Service.Dtos.Events;
 using EventManagement.Service.Interfaces.Events;
@@ -26,7 +27,7 @@ public class EventService : IEventService
             DateTime = eventDto.DateTime,
             Location = eventDto.Location,
             Description = eventDto.Description,
-            OrganizerId = 2,
+            OrganizerId = 1,
             CreatedAt = TimeHelper.GetDateTime(),
             UpdatedAt = TimeHelper.GetDateTime()
         };
@@ -35,23 +36,38 @@ public class EventService : IEventService
         return result > 0;
     }
 
-    public Task<bool> DeleteAsync(long eventId)
+    public async Task<bool> DeleteAsync(long eventId)
     {
-        throw new NotImplementedException();
+        var events = await _eventRepository.GetByIdAsync(eventId);
+        if(events is null) throw new EventNotFoundException();
+        var dbResult = await _eventRepository.DeleteAsync(eventId);
+        return dbResult > 0;
     }
 
-    public Task<IList<Event>> GetAllAsync(PaginationParams @params)
+    public async Task<IList<Event>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var events = await _eventRepository.GetAllAsync(@params);
+        return events;
     }
 
-    public Task<Event> GetByIdAsync(long eventId)
+    public async Task<Event> GetByIdAsync(long eventId)
     {
-        throw new NotImplementedException();
+        var events = await _eventRepository.GetByIdAsync(eventId);
+        if (events is null) throw new EventNotFoundException();
+        else return events;
     }
 
-    public Task<bool> UpdateAsync(long eventId, EventCreateDto eventDto)
+    public async Task<bool> UpdateAsync(long eventId, EventUpdateDto eventDto)
     {
-        throw new NotImplementedException();
+        var events = await _eventRepository.GetByIdAsync(eventId);
+        if (events is null) throw new EventNotFoundException();
+        events.EventName = eventDto.EventName;
+        events.DateTime = eventDto.DateTime;
+        events.Location = eventDto.Location;
+        events.Description = eventDto.Description;
+        events.OrganizerId = 1;
+        events.UpdatedAt = TimeHelper.GetDateTime();
+        var dbResult = await _eventRepository.UpdateAsync(eventId, events);
+        return dbResult > 0;
     }
 }

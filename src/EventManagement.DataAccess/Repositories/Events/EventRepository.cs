@@ -78,8 +78,8 @@ public class EventRepository : BaseRepository, IEventRepository
         {
             await _connection.OpenAsync();
 
-            string query = $"SELECT FROM events order by id desc" +
-                $"offset {@params.GetSkipCount} limit {@params.PageSize}";
+            string query = $"SELECT * FROM events order by id desc" +
+                $" offset { @params.GetSkipCount() } limit { @params.PageSize }";
 
             var result = (await _connection.QueryAsync<Event>(query)).ToList();
             return result;
@@ -94,13 +94,45 @@ public class EventRepository : BaseRepository, IEventRepository
         }
     }
 
-    public Task<Event> GetByIdAsync(long id)
+    public async Task<Event?> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM events where id = {id}";
+            var result = await _connection.QuerySingleAsync<Event>(query);
+            return result;
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<int> UpdateAsync(long id, Event entity)
+    public async Task<int> UpdateAsync(long id, Event entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+
+            string query = "UPDATE public.events SET event_name = @EventName, date_time = @DateTime, location=@Location," +
+                $"description = @Description, organizer_id = @OrganizerId," +
+                $"created_at=@CreatedAt, updated_at = @UpdatedAt WHERE id = { id };";
+
+            var result = await _connection.ExecuteAsync(query, entity);
+            return result;
+        }
+        catch
+        {
+            throw;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }

@@ -3,6 +3,5 @@ using EventManagement.Domain.Entities.Events;
 
 namespace EventManagement.DataAccess.Interfaces.Events;
 
-public interface IEventRepository :
-    IRepository<Event,Event>,IGetAll<Event>
+public interface IEventRepository : IRepository<Event,Event>,IGetAll<Event>
 { }

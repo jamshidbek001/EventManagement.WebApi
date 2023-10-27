@@ -16,6 +16,6 @@ namespace EventManagement.Service.Interfaces.Events
 
         public Task<Event> GetByIdAsync(long eventId);
 
-        public Task<bool> UpdateAsync(long eventId, EventCreateDto eventDto);
+        public Task<bool> UpdateAsync(long eventId, EventUpdateDto eventDto);
     }
 }
