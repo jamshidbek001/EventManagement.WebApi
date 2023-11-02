@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Repositories\EventRegistrations\" />
-    <Folder Include="Repositories\EventTickets\" />
     <Folder Include="Repositories\Users\" />
   </ItemGroup>
 
