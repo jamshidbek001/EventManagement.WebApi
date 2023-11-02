@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\Comments\" />
     <Folder Include="Repositories\EventRegistrations\" />
     <Folder Include="Repositories\EventTickets\" />
     <Folder Include="Repositories\Notifications\" />
