@@ -128,7 +128,7 @@ public class EventTicketRepository : BaseRepository, IEventTicketRepository
         }
         catch
         {
-            throw;
+            return 0;
         }
         finally
         {

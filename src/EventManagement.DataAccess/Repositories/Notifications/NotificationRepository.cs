@@ -128,7 +128,7 @@ public class NotificationRepository : BaseRepository, INotificationRepository
         }
         catch
         {
-            throw;
+            return 0;
         }
         finally
         {

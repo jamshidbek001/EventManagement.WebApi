@@ -128,7 +128,7 @@ public class EventRegistrationRepository : BaseRepository, IEventRegistrationRep
         }
         catch
         {
-            throw;
+            return 0;
         }
         finally
         {

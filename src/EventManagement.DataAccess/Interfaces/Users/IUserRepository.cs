@@ -7,5 +7,5 @@ namespace EventManagement.DataAccess.Interfaces.Users;
 public interface IUserRepository :
     IRepository<User,UserViewModel>,IGetAll<UserViewModel>,ISearchable<UserViewModel>
 {
-    public Task<User?> GetPhoneAsync(string phone);
+    public Task<User?> GetByEmailAsync(string email);
 }
