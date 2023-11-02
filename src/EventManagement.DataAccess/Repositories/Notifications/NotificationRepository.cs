@@ -1,26 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading;
 using Dapper;
-using EventManagement.DataAccess.Interfaces.Events;
+using EventManagement.DataAccess.Interfaces.Notifications;
 using EventManagement.DataAccess.Utils;
 using EventManagement.Domain.Entities.Events;
-using static Dapper.SqlMapper;
+using EventManagement.Domain.Entities.Notifications;
 
-namespace EventManagement.DataAccess.Repositories.Events;
+namespace EventManagement.DataAccess.Repositories.Notifications;
 
-public class EventRepository : BaseRepository, IEventRepository
+public class NotificationRepository : BaseRepository, INotificationRepository
 {
     public async Task<long> CountAsync()
     {
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT count(*) FROM events";
+            string query = "SELECT count(*) FROM notifications";
             var result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
         catch
         {
-
             return 0;
         }
         finally
@@ -29,16 +28,17 @@ public class EventRepository : BaseRepository, IEventRepository
         }
     }
 
-    public async Task<int> CreateAsync(Event entity)
+    public async Task<int> CreateAsync(Notification entity)
     {
         try
         {
             await _connection.OpenAsync();
 
-            string query = "INSERT INTO public.events(event_name,date_time,location,description,organizer_id,created_at,updated_at)" +
-                "VALUES (@EventName,@DateTime,@Location,@Description,@OrganizerId,@CreatedAt,@UpdatedAt);";
+            string query = "INSERT INTO public.notifications(recipient_id, content, time_stamp, is_read," +
+                "created_at, updated_at) " +
+                "VALUES (@RecipientId, @Content, @Timestamp, @IsRead, @CreatedAt, @UpdatedAt);";
 
-            var result = await _connection.ExecuteAsync(query,entity);
+            var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
         catch
@@ -56,8 +56,10 @@ public class EventRepository : BaseRepository, IEventRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "DELETE FROM events WHERE id = @Id";
-            var result = await _connection.ExecuteAsync(query, new { Id=id });
+
+            string query = "DELETE FROM notifications WHERE id=@Id";
+
+            var result = await _connection.ExecuteAsync(query, new { Id = id });
             return result;
         }
         catch
@@ -70,21 +72,21 @@ public class EventRepository : BaseRepository, IEventRepository
         }
     }
 
-    public async Task<IList<Event>> GetAllAsync(PaginationParams @params)
+    public async Task<IList<Notification>> GetAllAsync(PaginationParams @params)
     {
         try
         {
             await _connection.OpenAsync();
 
-            string query = $"SELECT * FROM events order by id desc" +
+            string query = $"SELECT * FROM notifications order by id desc" +
                 $" offset { @params.GetSkipCount() } limit { @params.PageSize }";
 
-            var result = (await _connection.QueryAsync<Event>(query)).ToList();
+            var result = (await _connection.QueryAsync<Notification>(query)).ToList();
             return result;
         }
         catch
         {
-            return new List<Event>();
+            return new List<Notification>();
         }
         finally
         {
@@ -92,13 +94,13 @@ public class EventRepository : BaseRepository, IEventRepository
         }
     }
 
-    public async Task<Event?> GetByIdAsync(long id)
+    public async Task<Notification?> GetByIdAsync(long id)
     {
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM events where id = {id}";
-            var result = await _connection.QuerySingleAsync<Event>(query);
+            string query = $"SELECT * FROM notifications where id = { id }";
+            var result = await _connection.QuerySingleAsync<Notification>(query);
             return result;
         }
         catch
@@ -111,15 +113,15 @@ public class EventRepository : BaseRepository, IEventRepository
         }
     }
 
-    public async Task<int> UpdateAsync(long id, Event entity)
+    public async Task<int> UpdateAsync(long id, Notification entity)
     {
         try
         {
             await _connection.OpenAsync();
 
-            string query = "UPDATE public.events SET event_name = @EventName, date_time = @DateTime, location=@Location," +
-                $"description = @Description, organizer_id = @OrganizerId," +
-                $"created_at=@CreatedAt, updated_at = @UpdatedAt WHERE id = { id };";
+            string query = $"UPDATE public.notifications SET recipient_id = @RecipientId, content = @Content," +
+                $"time_stamp = @Timestamp, is_read = @IsRead, created_at = @CreatedAt, updated_at = @UpdatedAt " +
+                $"WHERE id = { id };";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;

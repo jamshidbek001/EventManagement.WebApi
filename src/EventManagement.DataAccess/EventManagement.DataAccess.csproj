@@ -7,14 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\Comments\" />
-    <Folder Include="Repositories\EventRegistrations\" />
-    <Folder Include="Repositories\EventTickets\" />
-    <Folder Include="Repositories\Notifications\" />
-    <Folder Include="Repositories\Users\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.15" />
     <PackageReference Include="Npgsql" Version="8.0.0-rc.2" />
   </ItemGroup>
