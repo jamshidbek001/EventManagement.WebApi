@@ -36,8 +36,8 @@ public class EventTicketRepository : BaseRepository, IEventTicketRepository
 
             string query = "INSERT INTO public.event_tickets(event_id, ticket_name, price, quantity_available," +
                 "sales_start_date, sales_end_date, created_at, updated_at) " +
-                "VALUES (@EventId, @TicketName, @Price, @QuantityAvailable, @SalesStartDate," +
-                "@SalesEndDate, @CreatedAt, @UpdatedAt);";
+                "VALUES (@EventId, @TicketName, @Price, @QuantityAvailable, @SaleStartDate," +
+                "@SaleEndDate, @CreatedAt, @UpdatedAt);";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
