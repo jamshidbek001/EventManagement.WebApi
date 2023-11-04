@@ -37,7 +37,7 @@ public class EventRegistrationRepository : BaseRepository, IEventRegistrationRep
             string query = "INSERT INTO public.event_registration(event_id, attendee_id, numberof_tickets, total_price," +
                 "registration_date, payment_status, created_at, updated_at) " +
                 "VALUES (@EventId, @AttendeeId, @NumberOfTickets, @TotalPrice, @RegistrationDate," +
-                "@PatmentStatus, @CreatedAt, @UpdatedAt);";
+                "@PaymentStatus, @CreatedAt, @UpdatedAt);";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
