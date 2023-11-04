@@ -1,9 +1,7 @@
 ﻿using EventManagement.DataAccess.Utils;
 using EventManagement.Service.Dtos.EventTickets;
 using EventManagement.Service.Interfaces.EvenTickets;
-using EventManagement.Service.Interfaces.Events;
 using EventManagement.Service.Validators.Dtos.EventTickets;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManagement.WebApi.Controllers
@@ -45,7 +43,7 @@ namespace EventManagement.WebApi.Controllers
         {
             var eventTicketValidator = new EventTicketUpdateValidator();
             var result = eventTicketValidator.Validate(eventTicketUpdateDto);
-            if(result.IsValid) return Ok(await _service.UpdateAsync(eventTicketId, eventTicketUpdateDto));
+            if (result.IsValid) return Ok(await _service.UpdateAsync(eventTicketId, eventTicketUpdateDto));
             else return BadRequest(result.Errors);
         }
 

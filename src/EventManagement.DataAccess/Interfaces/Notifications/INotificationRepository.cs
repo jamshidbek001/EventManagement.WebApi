@@ -4,5 +4,5 @@ using EventManagement.Domain.Entities.Notifications;
 namespace EventManagement.DataAccess.Interfaces.Notifications;
 
 public interface INotificationRepository :
-    IRepository<Notification,Notification>,IGetAll<Notification>
+    IRepository<Notification, Notification>, IGetAll<Notification>
 { }

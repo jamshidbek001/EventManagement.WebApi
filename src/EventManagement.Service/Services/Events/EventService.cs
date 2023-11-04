@@ -17,7 +17,7 @@ public class EventService : IEventService
         this._eventRepository = eventRepository;
     }
 
-    public async Task<long> CountAsync()=> await _eventRepository.CountAsync();
+    public async Task<long> CountAsync() => await _eventRepository.CountAsync();
 
     public async Task<bool> CreateAsync(EventCreateDto eventDto)
     {
@@ -39,7 +39,7 @@ public class EventService : IEventService
     public async Task<bool> DeleteAsync(long eventId)
     {
         var events = await _eventRepository.GetByIdAsync(eventId);
-        if(events is null) throw new EventNotFoundException();
+        if (events is null) throw new EventNotFoundException();
         var dbResult = await _eventRepository.DeleteAsync(eventId);
         return dbResult > 0;
     }

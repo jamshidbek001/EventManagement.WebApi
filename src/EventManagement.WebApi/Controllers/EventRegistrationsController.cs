@@ -34,16 +34,16 @@ namespace EventManagement.WebApi.Controllers
         {
             var eventValidator = new EventRegistrationCreateValidator();
             var result = eventValidator.Validate(dto);
-            if(result.IsValid) return Ok(await _service.CreateAsync(dto));
+            if (result.IsValid) return Ok(await _service.CreateAsync(dto));
             else return BadRequest(result.Errors);
         }
 
         [HttpPut("eventRegistrationId")]
-        public async Task<IActionResult> UpdateAsync(long eventRegistrationId,[FromBody] EventRegistrationUpdateDto dto)
+        public async Task<IActionResult> UpdateAsync(long eventRegistrationId, [FromBody] EventRegistrationUpdateDto dto)
         {
             var eventValidator = new EventRegistrationUpdateValidator();
             var result = eventValidator.Validate(dto);
-            if(result.IsValid) return Ok(await _service.UpdateAsync(eventRegistrationId, dto));
+            if (result.IsValid) return Ok(await _service.UpdateAsync(eventRegistrationId, dto));
             else return BadRequest(result.Errors);
         }
 

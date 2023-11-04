@@ -32,7 +32,7 @@ namespace EventManagement.Service.Services.EventRegistrations
                 CreatedAt = TimeHelper.GetDateTime(),
                 UpdatedAt = TimeHelper.GetDateTime()
             };
-            
+
             var result = await _repository.CreateAsync(eventRegistration);
             return result > 0;
         }

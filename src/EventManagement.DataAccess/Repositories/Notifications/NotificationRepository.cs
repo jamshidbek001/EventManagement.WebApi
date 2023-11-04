@@ -1,8 +1,6 @@
-﻿using System.Threading;
-using Dapper;
+﻿using Dapper;
 using EventManagement.DataAccess.Interfaces.Notifications;
 using EventManagement.DataAccess.Utils;
-using EventManagement.Domain.Entities.Events;
 using EventManagement.Domain.Entities.Notifications;
 
 namespace EventManagement.DataAccess.Repositories.Notifications;
@@ -79,7 +77,7 @@ public class NotificationRepository : BaseRepository, INotificationRepository
             await _connection.OpenAsync();
 
             string query = $"SELECT * FROM notifications order by id desc" +
-                $" offset { @params.GetSkipCount() } limit { @params.PageSize }";
+                $" offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
             var result = (await _connection.QueryAsync<Notification>(query)).ToList();
             return result;
@@ -99,7 +97,7 @@ public class NotificationRepository : BaseRepository, INotificationRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM notifications where id = { id }";
+            string query = $"SELECT * FROM notifications where id = {id}";
             var result = await _connection.QuerySingleAsync<Notification>(query);
             return result;
         }
@@ -121,7 +119,7 @@ public class NotificationRepository : BaseRepository, INotificationRepository
 
             string query = $"UPDATE public.notifications SET recipient_id = @RecipientId, content = @Content," +
                 $"time_stamp = @Timestamp, is_read = @IsRead, created_at = @CreatedAt, updated_at = @UpdatedAt " +
-                $"WHERE id = { id };";
+                $"WHERE id = {id};";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;

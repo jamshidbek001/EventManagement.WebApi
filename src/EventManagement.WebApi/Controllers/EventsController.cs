@@ -20,7 +20,7 @@ namespace EventManagement.WebApi.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
-            => Ok(await _eventService.GetAllAsync(new PaginationParams(page,maxPageSize)));
+            => Ok(await _eventService.GetAllAsync(new PaginationParams(page, maxPageSize)));
 
         [HttpGet("{eventId}")]
         public async Task<IActionResult> GetByIdAsync(long eventId)
@@ -35,7 +35,7 @@ namespace EventManagement.WebApi.Controllers
         {
             var eventValidator = new EventCreateValidator();
             var result = eventValidator.Validate(eventDto);
-            if(result.IsValid) return Ok(await _eventService.CreateAsync(eventDto));
+            if (result.IsValid) return Ok(await _eventService.CreateAsync(eventDto));
             else return BadRequest(result.Errors);
         }
 
@@ -44,7 +44,7 @@ namespace EventManagement.WebApi.Controllers
         {
             var updateValidator = new EventUpdateValidator();
             var result = updateValidator.Validate(eventDto);
-            if(result.IsValid) return Ok(await _eventService.UpdateAsync(eventId,eventDto));
+            if (result.IsValid) return Ok(await _eventService.UpdateAsync(eventId, eventDto));
             else return BadRequest(result.Errors);
         }
 

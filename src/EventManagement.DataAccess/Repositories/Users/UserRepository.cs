@@ -1,9 +1,7 @@
-﻿using System.Numerics;
-using Dapper;
+﻿using Dapper;
 using EventManagement.DataAccess.Interfaces.Users;
 using EventManagement.DataAccess.Utils;
 using EventManagement.DataAccess.ViewModels.Users;
-using EventManagement.Domain.Entities.Events;
 using EventManagement.Domain.Entities.Users;
 
 namespace EventManagement.DataAccess.Repositories.Users;
@@ -58,7 +56,7 @@ public class UserRepository : BaseRepository, IUserRepository
         {
             await _connection.OpenAsync();
 
-            string query = $"DELETE FROM users WHERE id = { id }";
+            string query = $"DELETE FROM users WHERE id = {id}";
 
             var result = await _connection.ExecuteAsync(query);
             return result;
@@ -99,7 +97,7 @@ public class UserRepository : BaseRepository, IUserRepository
             await _connection.OpenAsync();
 
             string query = $"SELECT * FROM users order by id desc" +
-                $" offset { @params.GetSkipCount() } limit { @params.PageSize }";
+                $" offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
             var result = (await _connection.QueryAsync<UserViewModel>(query)).ToList();
             return result;
@@ -146,7 +144,7 @@ public class UserRepository : BaseRepository, IUserRepository
 
             string query = "UPDATE public.users SET user_name = @UserName, password = @Password, email = @Email," +
                 "first_name = @FirstName, last_name = @LastName, image_path = @ImagePath," +
-                $"created_at = @CreatedAt, updated_at = @UpdatedAt WHERE id = { id };";
+                $"created_at = @CreatedAt, updated_at = @UpdatedAt WHERE id = {id};";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
