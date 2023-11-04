@@ -57,7 +57,7 @@ public class EventRepository : BaseRepository, IEventRepository
         {
             await _connection.OpenAsync();
             string query = "DELETE FROM events WHERE id = @Id";
-            var result = await _connection.ExecuteAsync(query, new { Id=id });
+            var result = await _connection.ExecuteAsync(query, new { Id = id });
             return result;
         }
         catch
@@ -98,7 +98,7 @@ public class EventRepository : BaseRepository, IEventRepository
         {
             await _connection.OpenAsync();
             string query = $"SELECT * FROM events where id = {id}";
-            var result = await _connection.QuerySingleAsync<Event>(query);
+            var result = await _connection.QuerySingleAsync<Event>(query, new { Id = id });
             return result;
         }
         catch

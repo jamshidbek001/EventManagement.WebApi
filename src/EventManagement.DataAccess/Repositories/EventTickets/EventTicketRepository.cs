@@ -99,7 +99,7 @@ public class EventTicketRepository : BaseRepository, IEventTicketRepository
         {
             await _connection.OpenAsync();
             string query = $"SELECT * FROM event_tickets where id = { id }";
-            var result = await _connection.QuerySingleAsync<EventTicket>(query);
+            var result = await _connection.QuerySingleAsync<EventTicket>(query, new { Id = id });
             return result;
         }
         catch

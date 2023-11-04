@@ -94,7 +94,7 @@ public class CommentRepository : BaseRepository, ICommentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT FROM comments WHERE id = { id }";
+            string query = $"SELECT * FROM comments WHERE id = { id }";
             var result = await _connection.QuerySingleAsync<Comment>(query);
             return result;
         }
@@ -118,7 +118,7 @@ public class CommentRepository : BaseRepository, ICommentRepository
                 $"content = @Content, time_stamp = @Timestamp, created_at = @CreatedAt, updated_at = @UpdatedAt " +
                 $"WHERE id = { id };";
 
-            var result = await _connection.ExecuteAsync(query);
+            var result = await _connection.ExecuteAsync(query,entity);
             return result;
         }
         catch
