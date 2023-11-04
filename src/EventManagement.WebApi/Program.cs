@@ -23,15 +23,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
-builder.Services.AddScoped<IEventTicketRepository,EventTicketRepository>();
+builder.Services.AddScoped<IEventTicketRepository, EventTicketRepository>();
 builder.Services.AddScoped<IEventRegistrationRepository, EventRegistrationRepository>();
-builder.Services.AddScoped<ICommentRepository,CommentRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IEventService, EventService>();
-builder.Services.AddScoped<IEventTicketService,EventTicketService>();
+builder.Services.AddScoped<IEventTicketService, EventTicketService>();
 builder.Services.AddScoped<IEventRegistrationService, EventRegistrationService>();
-builder.Services.AddScoped<ICommentService,CommentService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 var app = builder.Build();
 

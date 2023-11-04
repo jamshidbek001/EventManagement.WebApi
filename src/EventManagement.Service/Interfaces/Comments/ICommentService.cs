@@ -1,8 +1,6 @@
 ﻿using EventManagement.DataAccess.Utils;
 using EventManagement.Domain.Entities.Comments;
-using EventManagement.Domain.Entities.Events;
 using EventManagement.Service.Dtos.Comments;
-using EventManagement.Service.Dtos.Events;
 
 namespace EventManagement.Service.Interfaces.Comments
 {

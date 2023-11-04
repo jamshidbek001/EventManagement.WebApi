@@ -35,7 +35,7 @@ public class CommentRepository : BaseRepository, ICommentRepository
             string query = "INSERT INTO public.comments(event_id, author_id, content, time_stamp, created_at, updated_at) " +
                 "VALUES (@EventId, @AuthorId, @Content, @Timestamp, @CreatedAt, @UpdatedAt);";
 
-            var result = await _connection.ExecuteAsync(query,entity);
+            var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
         catch
@@ -74,7 +74,7 @@ public class CommentRepository : BaseRepository, ICommentRepository
             await _connection.OpenAsync();
 
             string query = $"SELECT * FROM comments order by id desc offset " +
-                $"{@params.GetSkipCount() } limit {@params.PageSize}";
+                $"{@params.GetSkipCount()} limit {@params.PageSize}";
 
             var result = (await _connection.QueryAsync<Comment>(query)).ToList();
             return result;
@@ -94,7 +94,7 @@ public class CommentRepository : BaseRepository, ICommentRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM comments WHERE id = { id }";
+            string query = $"SELECT * FROM comments WHERE id = {id}";
             var result = await _connection.QuerySingleAsync<Comment>(query);
             return result;
         }
@@ -116,9 +116,9 @@ public class CommentRepository : BaseRepository, ICommentRepository
 
             string query = $"UPDATE public.comments SET event_id = @EventId, author_id = @AuthorId," +
                 $"content = @Content, time_stamp = @Timestamp, created_at = @CreatedAt, updated_at = @UpdatedAt " +
-                $"WHERE id = { id };";
+                $"WHERE id = {id};";
 
-            var result = await _connection.ExecuteAsync(query,entity);
+            var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
         catch

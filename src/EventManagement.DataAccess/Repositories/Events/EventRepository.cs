@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Dapper;
+﻿using Dapper;
 using EventManagement.DataAccess.Interfaces.Events;
 using EventManagement.DataAccess.Utils;
 using EventManagement.Domain.Entities.Events;
@@ -38,7 +37,7 @@ public class EventRepository : BaseRepository, IEventRepository
             string query = "INSERT INTO public.events(event_name,date_time,location,description,organizer_id,created_at,updated_at)" +
                 "VALUES (@EventName,@DateTime,@Location,@Description,@OrganizerId,@CreatedAt,@UpdatedAt);";
 
-            var result = await _connection.ExecuteAsync(query,entity);
+            var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
         catch
@@ -77,7 +76,7 @@ public class EventRepository : BaseRepository, IEventRepository
             await _connection.OpenAsync();
 
             string query = $"SELECT * FROM events order by id desc" +
-                $" offset { @params.GetSkipCount() } limit { @params.PageSize }";
+                $" offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
             var result = (await _connection.QueryAsync<Event>(query)).ToList();
             return result;
@@ -119,7 +118,7 @@ public class EventRepository : BaseRepository, IEventRepository
 
             string query = "UPDATE public.events SET event_name = @EventName, date_time = @DateTime, location=@Location," +
                 $"description = @Description, organizer_id = @OrganizerId," +
-                $"created_at=@CreatedAt, updated_at = @UpdatedAt WHERE id = { id };";
+                $"created_at=@CreatedAt, updated_at = @UpdatedAt WHERE id = {id};";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;

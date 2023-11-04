@@ -2,7 +2,6 @@
 using EventManagement.Service.Dtos.Comments;
 using EventManagement.Service.Interfaces.Comments;
 using EventManagement.Service.Validators.Dtos.Comments;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManagement.WebApi.Controllers
@@ -21,7 +20,7 @@ namespace EventManagement.WebApi.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
-            => Ok(await _service.GetAllAsync(new PaginationParams(page,maxPageSize)));
+            => Ok(await _service.GetAllAsync(new PaginationParams(page, maxPageSize)));
 
         [HttpGet("count")]
         public async Task<IActionResult> CountAsync() => Ok(await _service.CountAsync());
@@ -35,7 +34,7 @@ namespace EventManagement.WebApi.Controllers
         {
             var commentValidator = new CommentCreateValidator();
             var result = commentValidator.Validate(dto);
-            if(result.IsValid) return Ok(await _service.CreateAsync(dto));
+            if (result.IsValid) return Ok(await _service.CreateAsync(dto));
             else return BadRequest(result.Errors);
         }
 
@@ -44,7 +43,7 @@ namespace EventManagement.WebApi.Controllers
         {
             var commentValidator = new CommentUpdateValidator();
             var result = commentValidator.Validate(dto);
-            if(result.IsValid) return Ok(await _service.UpdateAsync(commentId, dto));
+            if (result.IsValid) return Ok(await _service.UpdateAsync(commentId, dto));
             else return BadRequest(result.Errors);
         }
 

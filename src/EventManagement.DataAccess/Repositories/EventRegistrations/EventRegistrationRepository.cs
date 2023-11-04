@@ -2,7 +2,6 @@
 using EventManagement.DataAccess.Interfaces.EventRegistrations;
 using EventManagement.DataAccess.Utils;
 using EventManagement.Domain.Entities.EventRegistrations;
-using EventManagement.Domain.Entities.Events;
 
 namespace EventManagement.DataAccess.Repositories.EventRegistrations;
 
@@ -98,7 +97,7 @@ public class EventRegistrationRepository : BaseRepository, IEventRegistrationRep
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM event_registration where id = { id }";
+            string query = $"SELECT * FROM event_registration where id = {id}";
             var result = await _connection.QuerySingleAsync<EventRegistration>(query);
             return result;
         }
@@ -121,7 +120,7 @@ public class EventRegistrationRepository : BaseRepository, IEventRegistrationRep
             string query = "UPDATE public.event_registration SET event_id = @EventId, attendee_id = @AttendeeId," +
                 "numberof_tickets = @NumberOfTickets, total_price = @TotalPrice, registration_date = @RegistrationDate," +
                 "payment_status = @PaymentStatus, created_at = @CreatedAt, updated_at = @UpdatedAt " +
-                $"WHERE id = { id };";
+                $"WHERE id = {id};";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;

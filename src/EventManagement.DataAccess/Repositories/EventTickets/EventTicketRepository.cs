@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using EventManagement.DataAccess.Interfaces.EventTickets;
 using EventManagement.DataAccess.Utils;
-using EventManagement.Domain.Entities.Events;
 using EventManagement.Domain.Entities.EventTickets;
 
 namespace EventManagement.DataAccess.Repositories.EventTickets;
@@ -98,7 +97,7 @@ public class EventTicketRepository : BaseRepository, IEventTicketRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM event_tickets where id = { id }";
+            string query = $"SELECT * FROM event_tickets where id = {id}";
             var result = await _connection.QuerySingleAsync<EventTicket>(query, new { Id = id });
             return result;
         }
@@ -121,7 +120,7 @@ public class EventTicketRepository : BaseRepository, IEventTicketRepository
             string query = "UPDATE public.event_tickets SET event_id = @EventId, ticket_name = @TicketName," +
                 "price = @Price, quantity_available = @QuantityAvailable, sales_start_date = @SaleStartDate," +
                 "sales_end_date = @SaleEndDate, created_at = @CreatedAt, updated_at = @UpdatedAt " +
-                $"WHERE id = { id };";
+                $"WHERE id = {id};";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
