@@ -97,7 +97,7 @@ public class EventRepository : BaseRepository, IEventRepository
         {
             await _connection.OpenAsync();
             string query = $"SELECT * FROM events where id = {id}";
-            var result = await _connection.QuerySingleAsync<Event>(query, new { Id = id });
+            var result = await _connection.QuerySingleAsync<Event>(query);
             return result;
         }
         catch

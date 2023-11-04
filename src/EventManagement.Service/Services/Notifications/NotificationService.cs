@@ -52,7 +52,7 @@ namespace EventManagement.Service.Services.Notifications
         public async Task<Notification> GetByIdAsync(long notificationId)
         {
             var notification = await _repository.GetByIdAsync(notificationId);
-            if(notification is null) throw new NotificationNotFoundException();
+            if (notification is null) throw new NotificationNotFoundException();
             else return notification;
         }
 
