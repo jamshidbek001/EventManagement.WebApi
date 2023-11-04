@@ -1,4 +1,5 @@
-﻿using EventManagement.Service.Interfaces.Common;
+﻿using EventManagement.Service.Common.Helpers;
+using EventManagement.Service.Interfaces.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -15,13 +16,32 @@ public class FileService : IFileService
         ROOTPATH = env.WebRootPath;
     }
 
-    public Task<bool> DeleteImageAsync(string subpath)
+    public async Task<bool> DeleteImageAsync(string subpath)
     {
-        throw new NotImplementedException();
+        string path = Path.Combine(ROOTPATH, subpath);
+
+        if (File.Exists(path))
+        {
+            await Task.Run(() =>
+            {
+                File.Delete(path);
+            });
+
+            return true;
+        }
+        else return false;
     }
 
-    public Task<string> UploadImageAsync(IFormFile image)
+    public async Task<string> UploadImageAsync(IFormFile image)
     {
-        throw new NotImplementedException();
+        string newImage = MediaHelper.MakeImageName(image.FileName);
+        string subpath = Path.Combine(MEDIA, IMAGES, newImage);
+        string path = Path.Combine(ROOTPATH, subpath);
+
+        var stream = new FileStream(path, FileMode.Create);
+        await image.CopyToAsync(stream);
+        stream.Close();
+
+        return subpath;
     }
 }
