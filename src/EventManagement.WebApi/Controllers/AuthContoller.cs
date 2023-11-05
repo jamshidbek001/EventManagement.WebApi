@@ -30,5 +30,16 @@ namespace EventManagement.WebApi.Controllers
             }
             else return BadRequest(result.Errors);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
+        {
+            var loginValidator = new LoginValidator();
+            var valResult = loginValidator.Validate(loginDto);
+            if(valResult.IsValid == false) return BadRequest(valResult.Errors);
+
+            var serviceResult = await _service.LoginAsync(loginDto);
+            return Ok(new { serviceResult.Result, serviceResult.Token });
+        }
     }
 }

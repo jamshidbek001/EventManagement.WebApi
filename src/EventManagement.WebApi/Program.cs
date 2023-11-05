@@ -46,6 +46,7 @@ builder.Services.AddScoped<IEventRegistrationService, EventRegistrationService>(
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 

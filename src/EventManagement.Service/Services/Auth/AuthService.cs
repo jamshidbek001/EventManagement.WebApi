@@ -1,5 +1,6 @@
 ﻿using EventManagement.DataAccess.Interfaces.Users;
 using EventManagement.Domain.Entities.Users;
+using EventManagement.Domain.Exceptions.Auth;
 using EventManagement.Domain.Exceptions.Users;
 using EventManagement.Service.Common.Helpers;
 using EventManagement.Service.Common.Security;
@@ -16,17 +17,20 @@ namespace EventManagement.Service.Services.Auth
         private readonly IUserRepository _repository;
         private readonly IMemoryCache _memoryCache;
         private readonly IFileService _fileService;
+        private readonly ITokenService _tokenService;
         private const int CACHED_MINUTES_FOR_REGISTER = 60;
         private const string REGISTER_CACHE_KEY = "register_";
 
         public AuthService(
             IUserRepository repository,
             IMemoryCache memoryCache,
-            IFileService fileService)
+            IFileService fileService,
+            ITokenService tokenService)
         {
             this._repository = repository;
             this._memoryCache = memoryCache;
             this._fileService = fileService;
+            this._tokenService = tokenService;
         }
 
         #pragma warning disable
@@ -61,6 +65,16 @@ namespace EventManagement.Service.Services.Auth
             var dbResult = await _repository.CreateAsync(user);
 
             return dbResult > 0;
+        }
+
+        public async Task<(bool Result, string Token)> LoginAsync(LoginDto loginDto)
+        {
+            var user = await _repository.GetByEmailAsync(loginDto.Email);
+            if (user is null) throw new UserNotFoundException();
+            var hasherResult = PasswordHasher.Verify(loginDto.Password, user.PasswordHash,user.Salt);
+            if (hasherResult == false) throw new PasswordNotMatchException();
+            var token = _tokenService.GenerateToken(user);
+            return (Result: true, Token: token);
         }
     }
 }
