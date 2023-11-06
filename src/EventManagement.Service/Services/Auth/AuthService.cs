@@ -55,6 +55,21 @@ namespace EventManagement.Service.Services.Auth
             return (Result: true, cachedMinutes: CACHED_MINUTES_FOR_REGISTER);
         }
 
+        public async Task<(bool Result, int CachedVerificationMinutes)> SendCodeForRegisterAsync(string email)
+        {
+            if (_memoryCache.TryGetValue(email, out RegisterDto registerDto))
+            {
+                VerificationDto verificationDto = new VerificationDto();
+                verificationDto.Attempt = 0;
+                verificationDto.CreatedAt = TimeHelper.GetDateTime();
+                verificationDto.Code = 11111;
+                _memoryCache.Set(email, verificationDto, TimeSpan.FromMinutes(CACHED_MINUTES_FOR_VERIFICATION));
+                return (Result: true, cachedVerificationMinutes: CACHED_MINUTES_FOR_VERIFICATION);
+            }
+
+            else throw new UserCacheDataExpiredException();
+        }
+
         public async Task<(bool Result, string Token)> VerifyRegisterAsync(string email, int code)
         {
             if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY + email, out RegisterDto registerDto))
@@ -114,7 +129,7 @@ namespace EventManagement.Service.Services.Auth
         {
             var user = await _repository.GetByEmailAsync(loginDto.Email);
             if (user is null) throw new UserNotFoundException();
-            var hasherResult = PasswordHasher.Verify(loginDto.Password, user.PasswordHash,user.Salt);
+            var hasherResult = PasswordHasher.Verify(loginDto.Password, user.PasswordHash, user.Salt);
             if (hasherResult == false) throw new PasswordNotMatchException();
             var token = _tokenService.GenerateToken(user);
             return (Result: true, Token: token);
