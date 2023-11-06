@@ -33,9 +33,9 @@ public class UserRepository : BaseRepository, IUserRepository
         {
             await _connection.OpenAsync();
 
-            string query = "INSERT INTO public.users(user_name, password, email, first_name, last_name, image_path," +
+            string query = "INSERT INTO public.users(user_name, password, email, first_name, last_name, image_path, password_hash, salt," +
                 "created_at, updated_at) " +
-                "VALUES (@UserName, @Password, @Email, @FirstName, @LastName, @ImagePath, @CreatedAt, @UpdatedAt);";
+                "VALUES (@UserName, @Password, @Email, @FirstName, @LastName, @ImagePath, @CreatedAt, @UpdatedAt, @PasswordHash, @Salt);";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
@@ -144,7 +144,8 @@ public class UserRepository : BaseRepository, IUserRepository
 
             string query = "UPDATE public.users SET user_name = @UserName, password = @Password, email = @Email," +
                 "first_name = @FirstName, last_name = @LastName, image_path = @ImagePath," +
-                $"created_at = @CreatedAt, updated_at = @UpdatedAt WHERE id = {id};";
+                $"created_at = @CreatedAt, updated_at = @UpdatedAt, password_hash = @PasswordHash, " +
+                $"salt = @Salt WHERE id = {id};";
 
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
