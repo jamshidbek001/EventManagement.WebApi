@@ -6,6 +6,8 @@ namespace EventManagement.Service.Interfaces.Auth
     {
         public Task<(bool Result, int cachedMinutes)> RegisterAsync(RegisterDto dto);
 
+        public Task<(bool Result, string Token)> VerifyRegisterAsync(string email, int code);
+
         public Task<(bool Result, string Token)> LoginAsync(LoginDto dto);
     }
 }

@@ -31,6 +31,15 @@ namespace EventManagement.WebApi.Controllers
             else return BadRequest(result.Errors);
         }
 
+        [HttpPost("register/verify")]
+        public async Task<IActionResult> VerifyRegisterAsync([FromBody] VerifyRegisterDto verifyRegisterDto)
+        {
+            var serviceResult =
+                await _service.VerifyRegisterAsync(verifyRegisterDto.Email, verifyRegisterDto.Code);
+
+            return Ok(new { serviceResult.Result, serviceResult.Token });
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
         {
