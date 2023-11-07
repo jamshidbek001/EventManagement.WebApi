@@ -19,6 +19,7 @@ namespace EventManagement.Service.Services.Auth
         private readonly IMemoryCache _memoryCache;
         private readonly IFileService _fileService;
         private readonly ITokenService _tokenService;
+        private readonly IMailSender _mailSender;
         private const int CACHED_MINUTES_FOR_REGISTER = 60;
         private const int CACHED_MINUTES_FOR_VERIFICATION = 5;
         private const string REGISTER_CACHE_KEY = "register_";
@@ -29,12 +30,14 @@ namespace EventManagement.Service.Services.Auth
             IUserRepository repository,
             IMemoryCache memoryCache,
             IFileService fileService,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IMailSender mailSender)
         {
             this._repository = repository;
             this._memoryCache = memoryCache;
             this._fileService = fileService;
             this._tokenService = tokenService;
+            this._mailSender = mailSender;
         }
 
         #pragma warning disable
@@ -57,14 +60,31 @@ namespace EventManagement.Service.Services.Auth
 
         public async Task<(bool Result, int CachedVerificationMinutes)> SendCodeForRegisterAsync(string email)
         {
-            if (_memoryCache.TryGetValue(email, out RegisterDto registerDto))
+            if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY +  email, out RegisterDto registerDto))
             {
                 VerificationDto verificationDto = new VerificationDto();
                 verificationDto.Attempt = 0;
                 verificationDto.CreatedAt = TimeHelper.GetDateTime();
-                verificationDto.Code = 11111;
-                _memoryCache.Set(email, verificationDto, TimeSpan.FromMinutes(CACHED_MINUTES_FOR_VERIFICATION));
+                verificationDto.Code = 12345;
+
+                if(_memoryCache.TryGetValue(VERIFY_REGISTER_CACHE_KEY + email, out VerificationDto oldVerificationDto))
+                {
+                    _memoryCache.Remove(VERIFY_REGISTER_CACHE_KEY + email);
+                }
+
+                _memoryCache.Set(VERIFY_REGISTER_CACHE_KEY + email, verificationDto,
+                    TimeSpan.FromMinutes(CACHED_MINUTES_FOR_VERIFICATION));
+
                 return (Result: true, cachedVerificationMinutes: CACHED_MINUTES_FOR_VERIFICATION);
+
+                EmailMessage emailMessage = new EmailMessage();
+                emailMessage.Title = "Event Management";
+                emailMessage.Content = "Verification code: " + verificationDto.Code;
+                emailMessage.Recipient = email;
+
+                var emailResult = await _mailSender.SendEmailAsync(emailMessage);
+                if (emailResult is true) return (Result: true, cachedVerificationMinutes: CACHED_MINUTES_FOR_VERIFICATION);
+                else return (Result: false, cachedVerificationMinutes: 0);
             }
 
             else throw new UserCacheDataExpiredException();
@@ -81,7 +101,6 @@ namespace EventManagement.Service.Services.Auth
 
                     else if (verificationDto.Code == code)
                     {
-                        verificationDto.Code = 11111;
                         var dbResult = await RegisterToDatabaseAsync(registerDto);
                         if (dbResult is true)
                         {
@@ -110,12 +129,11 @@ namespace EventManagement.Service.Services.Auth
         private async Task<bool> RegisterToDatabaseAsync(RegisterDto registerDto)
         {
             var user = new User();
-            string imagePath = await _fileService.UploadImageAsync(registerDto.Image);
+            //string imagePath = await _fileService.UploadImageAsync(registerDto.Image);
             user.FirstName = registerDto.FirstName;
             user.LastName = registerDto.LastName;
-            user.Email = registerDto.Email;
-            user.UserName = "";
-            user.ImagePath = imagePath;
+            user.Email = registerDto.Email.ToLower();
+            //user.ImagePath = imagePath;
             var hasherResult = PasswordHasher.Hash(registerDto.Password);
             user.PasswordHash = hasherResult.Hash;
             user.Salt = hasherResult.Salt;

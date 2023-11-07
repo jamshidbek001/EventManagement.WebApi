@@ -40,7 +40,7 @@ namespace EventManagement.WebApi.Controllers
         }
 
         [HttpPost("register/verify")]
-        public async Task<IActionResult> VerifyRegisterAsync([FromBody] VerifyRegisterDto verifyRegisterDto)
+        public async Task<IActionResult> VerifyRegisterAsync([FromForm] VerifyRegisterDto verifyRegisterDto)
         {
             var serviceResult =
                 await _service.VerifyRegisterAsync(verifyRegisterDto.Email, verifyRegisterDto.Code);
@@ -49,7 +49,7 @@ namespace EventManagement.WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> LoginAsync([FromForm] LoginDto loginDto)
         {
             var loginValidator = new LoginValidator();
             var valResult = loginValidator.Validate(loginDto);

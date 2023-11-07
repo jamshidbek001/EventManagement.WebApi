@@ -20,17 +20,17 @@ namespace EventManagement.Service.Validators.Dtos.Auth
             RuleFor(dto => dto.Password).Must(password => PasswordValidator.IsStrongPassword(password).IsValid)
                 .WithMessage("Password is not strong");
 
-            int maxImageSize = 3;
-            RuleFor(dto => dto.Image).NotNull().NotEmpty().WithMessage("Image field is required");
+            //int maxImageSize = 3;
+            //RuleFor(dto => dto.Image).NotNull().NotEmpty().WithMessage("Image field is required");
 
-            RuleFor(dto => dto.Image.Length).LessThan(maxImageSize * 1024 * 1024 + 1)
-                .WithMessage($"Image size must be less than {maxImageSize}");
+            //RuleFor(dto => dto.Image.Length).LessThan(maxImageSize * 1024 * 1024 + 1)
+            //    .WithMessage($"Image size must be less than {maxImageSize}");
 
-            RuleFor(dto => dto.Image.FileName).Must(predicate =>
-            {
-                FileInfo fielinfo = new FileInfo(predicate);
-                return MediaHelper.GetImageExtensions().Contains(fielinfo.Extension);
-            }).WithMessage("This file type is not image file");
+            //RuleFor(dto => dto.Image.FileName).Must(predicate =>
+            //{
+            //    FileInfo fielinfo = new FileInfo(predicate);
+            //    return MediaHelper.GetImageExtensions().Contains(fielinfo.Extension);
+            //}).WithMessage("This file type is not image file");
         }
     }
 }

@@ -47,6 +47,7 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddSingleton<IMailSender, MailSender>();
 
 var app = builder.Build();
 

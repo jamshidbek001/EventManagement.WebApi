@@ -16,6 +16,6 @@
 
         public string LastName { get; set; } = String.Empty;
 
-        public string ImagePath { get; set; } = String.Empty;
+        //public string ImagePath { get; set; } = String.Empty;
     }
 }

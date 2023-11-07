@@ -12,6 +12,6 @@ namespace EventManagement.Service.Dtos.Auth
 
         public string Password { get; set; } = String.Empty;
 
-        public IFormFile Image { get; set; } = default!;
+        //public IFormFile Image { get; set; } = default!;
     }
 }
