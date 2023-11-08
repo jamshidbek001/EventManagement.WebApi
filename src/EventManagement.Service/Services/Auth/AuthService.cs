@@ -137,7 +137,8 @@ namespace EventManagement.Service.Services.Auth
             var hasherResult = PasswordHasher.Hash(registerDto.Password);
             user.PasswordHash = hasherResult.Hash;
             user.Salt = hasherResult.Salt;
-            user.CreatedAt = user.UpdatedAt = TimeHelper.GetDateTime();
+            user.CreatedAt = TimeHelper.GetDateTime();
+            user.UpdatedAt = TimeHelper.GetDateTime();
             var dbResult = await _repository.CreateAsync(user);
 
             return dbResult > 0;
